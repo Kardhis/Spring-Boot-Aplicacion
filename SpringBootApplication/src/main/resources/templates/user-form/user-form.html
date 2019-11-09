@@ -1,6 +1,16 @@
 <!-- Formulario de usuarios-->
-<!--  th:object="${userForm}" = indica el tipo de objeto que este form va a manejar. -->
-<form class="form" role="form" autocomplete="off" th:object="${userForm}" th:action="@{/userForm}" method="post">
+
+<!-- th:object="${userForm}" = indica el tipo de objeto que este form va a manejar. -->
+<!-- th:action="${editMode} ? @{/editUser} : @{/userForm}" = aquí miramos el valor de la variable 'editMode':
+		a) Si es true, el action del form irá a '/editUser'. 
+		b) Si es false, el action del form irá a '/userForm'.
+-->
+<form class="form" role="form" autocomplete="off" th:object="${userForm}" th:action="${editMode} ? @{/editUser} : @{/userForm}" method="post">
+	<!-- Para poder pasar la validación del Model, ocultaremos los campos 'Password' y 'Confirm': -->
+	<input class="form-control" type=hidden th:field="${userForm.id}" th:if="${editMode}">
+	<input class="form-control" type=hidden th:field="${userForm.password}" th:if="${editMode}">
+<!-- 	<input class="form-control" type=hidden th:field="${userForm.confirmPassword}" th:if="${editMode}"> -->
+	
 	<!-- form-group = indica la tupla 'label' / 'input' que suele tener un formulario. -->
 	<!-- row = indica que este div será una fila en el formulario. -->
 	<div class="form-group row">
@@ -44,14 +54,14 @@
 			<div class="alert-danger" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Name Error</div>
 		</div>
 	</div>
-	<div class="form-group row">
+	<div class="form-group row" th:if="${editMode==null or editMode==false}">
 		<label class="col-lg-3 col-form-label form-control-label">Password</label>
 		<div class="col-lg-9">
 			<input class="form-control" type="password" th:field="${userForm.password}">
 			<div class="alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name Error</div>
 		</div>
 	</div>
-	<div class="form-group row">
+	<div class="form-group row" th:if="${editMode==null or editMode==false}">
 		<label class="col-lg-3 col-form-label form-control-label">Confirm</label>
 		<div class="col-lg-9">
 			<input class="form-control" type="password" th:field="${userForm.confirmPassword}">
@@ -63,8 +73,9 @@
 		<!-- col-lg-12 = esta fila ocupará todo el ancho. -->
 		<!-- text-center = centrará el contenido. -->
 		<div class="col-lg-12 text-center">
-			<input type="reset" class="btn btn-secondary" value="Cancel">
-			<input type="submit" class="btn btn-primary" value="Save Changes">
+<!-- 			<input type="reset" class="btn btn-secondary" value="Cancel"> -->
+			<a class="btn btn-secondary" th:href="@{'/userForm/cancel'}">Cancel</a>
+			<input type="submit" class="btn btn-primary" value="Save Changes" th:value="${editMode} ? 'Save User' : 'Create User'">
 		</div>
 	</div>
 	<div class="alert alert-danger text-center" th:if="${formErrorMessage}" th:text="${formErrorMessage}">Error Message</div>

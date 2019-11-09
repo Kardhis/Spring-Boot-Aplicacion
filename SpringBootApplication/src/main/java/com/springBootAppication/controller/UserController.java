@@ -9,6 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.springBootAppication.entity.User;
@@ -24,6 +25,10 @@ public class UserController {
 	@Autowired
 	RoleRepository roleRepository;
 
+	
+	// Los métodos con GET nos sirven para obtener datos de la vista.
+	// Los métodos con POST nos sirven para enviar datos a la vista.
+	
 	@GetMapping("/")
 	public String index() {
 		return "index";	// Buscará automáticamente en la carpeta 'templates' un archivo que se llame 'index.html'.
@@ -65,5 +70,51 @@ public class UserController {
 		model.addAttribute("roles", roleRepository.findAll());
 		
 		return "user-form/user-view";
+	}
+	
+	@GetMapping("/editUser/{id}") // Indicamos al Spring MVC que vamos a recibir un parámetro llamado 'id'.
+	public String getEditUserForm(Model model, @PathVariable(name="id") Long id) throws Exception {
+		User userToEdit = userService.getUserById(id);
+		
+		model.addAttribute("userForm", userToEdit);
+		model.addAttribute("userList", userService.getAllUsers());
+		model.addAttribute("roles", roleRepository.findAll());
+		model.addAttribute("formTab", "active");
+		model.addAttribute("editMode", "true");
+		
+		return "user-form/user-view";
+	}
+	
+	@PostMapping("/editUser")	// El BindingResult encapsula los errores producidos al realizar la validación.
+	public String postEditUserForm(@Valid @ModelAttribute("userForm") User user, BindingResult result, ModelMap model) {
+		// Verificamos si el resultado tiene errores:
+		if (result.hasErrors()) {
+			model.addAttribute("userForm", user);	// Devolvemos el usuario recibido para que no se pierdan los datos que se introdujeron en el formulario.
+			model.addAttribute("formTab", "active");
+			model.addAttribute("editMode", "true");
+		} else { // Si no hay errores, procedemos a crear el usuario introducido en la vista:
+			try {
+				userService.updateUser(user);
+				model.addAttribute("userForm", new User());
+				model.addAttribute("listTab", "active");
+			} catch (Exception e) {
+				model.addAttribute("formErrorMessage", e.getMessage());
+				model.addAttribute("userForm", user);
+				model.addAttribute("formTab", "active");
+				model.addAttribute("userList", userService.getAllUsers());
+				model.addAttribute("roles", roleRepository.findAll());
+				model.addAttribute("editMode", "true");
+			}
+		}
+
+		model.addAttribute("userList", userService.getAllUsers());
+		model.addAttribute("roles", roleRepository.findAll());
+		
+		return "user-form/user-view";
+	}
+	
+	@GetMapping("/userForm/cancel")
+	public String calcelEditUser(ModelMap model) {
+		return "redirect:/userForm";
 	}
 }
