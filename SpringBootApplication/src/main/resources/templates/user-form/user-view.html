@@ -57,7 +57,7 @@
 					<!-- tab-pane = indica que este 'div' será un panel. -->
 					<!-- fade = se mostrará el panel como un difuminado. -->
 					<!-- show = indicamos que el panel se muestre al cargarse la página. -->
-					<div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list-tab">
+					<div class="tab-pane fade show" th:classappend=" ${listTab}" id="list" role="tabpanel" aria-labelledby="list-tab">
 						<!-- card = las 'cards' están compuestas por 2 partes: -->
 							<!-- 1. El header: el encabezado de la card. -->
 							<!-- 2. El body: donde irá el contenido de la card. -->
@@ -74,7 +74,7 @@
 						</div>
 					</div>	<!-- Fin del panel 'List'. -->
 					
-					<div class="tab-pane fade" id="form" role="tabpanel" aria-labelledby="form-tab">
+					<div class="tab-pane fade show" th:classappend=" ${formTab}" id="form" role="tabpanel" aria-labelledby="form-tab">
 						<div class="card">
 							<div class="card-header">
 								<h4>User Information</h4>

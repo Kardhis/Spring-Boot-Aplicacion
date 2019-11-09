@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -32,21 +34,29 @@ public class User implements Serializable {
 	private long id;
 	
 	@Column
+	@NotBlank	// Valida que el valor introducido no sea null y que tenga al menos 1 caracter.
+				// Si el tipo de dato fuese uno primitivo, en vez de @NotBlank, tendríamos que usar el @NotNull.
+	@Size(min=2, max=15, message="No se cumplen las reglas de tamaño.")	// Valida que el valor introducido sea mínimo de 2 caracteres y un máximo de 15.
 	private String firstName;
 	
 	@Column
+	@NotBlank
 	private String lastName;
 	
 	@Column(unique=true)
+	@NotBlank
 	private String email;
 	
 	@Column(unique=true)
+	@NotBlank
 	private String username;
 	
 	@Column
+	@NotBlank
 	private String password;
 	
 	@Transient
+	@NotBlank
 	private String confirmPassword;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
