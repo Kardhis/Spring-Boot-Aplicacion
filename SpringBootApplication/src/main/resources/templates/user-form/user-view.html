@@ -42,12 +42,14 @@
 				<ul class="nav nav-tabs justify-content-end">
 					<li class="nav-item">
 						<!-- active = indica que este enlace será el que esté activo cuando la página se cargue. -->
+						<!--  th:classappend=" ${listTab}" = indicamos el tab que estará activo. -->
 						<!-- href="#list" = indicamos el contenido que se cargará cuando se clique en este tab. -->
-						<a class="nav-link active" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="false">List</a>
+<!-- 						<a class="nav-link active" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="false">List</a> -->
+						<a class="nav-link" th:classappend=" ${listTab}" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="false">List</a>
 					</li>
 					
 					<li class="nav-item">
-						<a class="nav-link" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="true">Form</a>				   	
+						<a class="nav-link" th:classappend=" ${formTab}" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="true">Form</a>				   	
 					</li>
 				</ul>
 				
@@ -64,41 +66,10 @@
 								<h4>Roster</h4>
 							</div>
 							
-							<!-- Todo el código comentado abajo, lo sustituimos por este que sigue para poder trabajar más fácilmente. -->
 							<div class="card-body">
+								<!-- th:include="user-form/user-list.html" = incluirá el código del archivo 'user-list.html' -->
 								<!-- th:remove="tag" = con esto indicamos que este 'tag' (este div) se elimine una vez se haya insertado el trozo de código que le hemos indicado (el 'user-list.html'). -->
 								<div th:include="user-form/user-list.html" th:remove="tag"></div>
-								
-<!-- 								Lista de usuarios -->
-<!-- 								table-responsive = indicamos que la tabla será 'responsive', que se adaptará automáticamente al tamaño de la pantalla. -->
-<!-- 								<div class="table-responsive"> -->
-<!-- 									table-bordered =  -->
-<!-- 									table-hover = resalta la fila sobre la que se posa el ratón. -->
-<!-- 									<table id="userList" class="table table-hover table-striped"> -->
-<!-- 										<thead class="thead-light"> -->
-<!-- 											<tr> -->
-<!-- 												<th scope="col">#</th> -->
-<!-- 												<th scope="col">First</th> -->
-<!-- 												<th scope="col">Last</th> -->
-<!-- 												<th scope="col">Username</th> -->
-<!-- 												<th scope="col">E-mail</th> -->
-<!-- 												<th></th> -->
-<!-- 											</tr> -->
-<!-- 										</thead> -->
-<!-- 										<tbody> -->
-<!-- 											<tr> -->
-<!-- 												<th scope="row">1</th> -->
-<!-- 												<td>Cristian</td> -->
-<!-- 												<td>Ruiz</td> -->
-<!-- 												<td>c.r.username</td> -->
-<!-- 												<td>c.r.username@blog.com</td> -->
-<!-- 												<td> -->
-<!-- 													<a href="#"><i class="fas fa-edit"></i></a> | <a href="#"><i class="fas fa-user-times"></i></a> -->
-<!-- 												</td> -->
-<!-- 											</tr> -->
-<!-- 										</tbody> -->
-<!-- 									</table> -->
-<!-- 								</div> -->
 							</div>
 						</div>
 					</div>	<!-- Fin del panel 'List'. -->
@@ -109,62 +80,8 @@
 								<h4>User Information</h4>
 							</div>
 
-							<!-- Todo el código comentado abajo, lo sustituimos por este que sigue para poder trabajar más fácilmente. -->
 							<div class="card-body">
 								<div th:include="user-form/user-form.html" th:remove="tag"></div>
-								
-<!-- 								Formulario de usuarios -->
-<!-- 								<form class="form" role="form" autocomplete="off"> -->
-<!-- 									form-group = indica la tupla 'label' / 'input' que suele tener un formulario. -->
-<!-- 									row = indica que este div será una fila en el formulario. -->
-<!-- 									<div class="form-group row"> -->
-<!-- 										<label class="col-lg-3 col-form-label form-control-label">First name</label> -->
-<!-- 										<div class="col-lg-9"> -->
-<!-- 											<input class="form-control" type="text" > -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-<!-- 									<div class="form-group row"> -->
-<!-- 										<label class="col-lg-3 col-form-label form-control-label">Last -->
-<!-- 											name</label> -->
-<!-- 										<div class="col-lg-9"> -->
-<!-- 											<input class="form-control" type="text" > -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-<!-- 									<div class="form-group row"> -->
-<!-- 										<label class="col-lg-3 col-form-label form-control-label">Email</label> -->
-<!-- 										<div class="col-lg-9"> -->
-<!-- 											<input class="form-control" type="email"> -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-<!-- 									<div class="form-group row"> -->
-<!-- 										<label class="col-lg-3 col-form-label form-control-label">Username</label> -->
-<!-- 										<div class="col-lg-9"> -->
-<!-- 											<input class="form-control" type="text"> -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-<!-- 									<div class="form-group row"> -->
-<!-- 										<label class="col-lg-3 col-form-label form-control-label">Password</label> -->
-<!-- 										<div class="col-lg-9"> -->
-<!-- 											<input class="form-control" type="password"> -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-<!-- 									<div class="form-group row"> -->
-<!-- 										<label class="col-lg-3 col-form-label form-control-label">Confirm</label> -->
-<!-- 										<div class="col-lg-9"> -->
-<!-- 											<input class="form-control" type="password" > -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-									
-<!-- 									<div class="form-group row"> -->
-<!-- 										col-lg-12 = esta fila ocupará todo el ancho. -->
-<!-- 										text-center = centrará el contenido. -->
-<!-- 										<div class="col-lg-12 text-center"> -->
-<!-- 											<input type="reset" class="btn btn-secondary" value="Cancel"> -->
-<!-- 											<input type="button" class="btn btn-primary" -->
-<!-- 												value="Save Changes"> -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-<!-- 								</form> -->
 							</div>	<!-- Fin del body de la card. -->
 						</div> <!-- Fin de la Card. -->
 					</div>	<!-- Fin del panel 'Form'. -->
