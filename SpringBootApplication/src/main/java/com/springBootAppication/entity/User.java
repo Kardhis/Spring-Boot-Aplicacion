@@ -59,7 +59,7 @@ public class User implements Serializable {
 //	@NotBlank
 	private String confirmPassword;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY)	// Para obtener los roles usamos la manera 'LAZY', que significa que sólo obtengo los roles cuando los necesito usar.
 	@JoinTable(name = "user_roles", 
 			joinColumns = @JoinColumn(name="user_id"), 
 			inverseJoinColumns = @JoinColumn(name="role_id"))

@@ -35,7 +35,7 @@ public class UserController {
 	// Los métodos con GET nos sirven para obtener datos de la vista.
 	// Los métodos con POST nos sirven para enviar datos a la vista.
 	
-	@GetMapping("/")
+	@GetMapping({"/", "/login"})
 	public String index() {
 		return "index";	// Buscará automáticamente en la carpeta 'templates' un archivo que se llame 'index.html'.
 	}
