@@ -1,8 +1,8 @@
 package com.springBootAppication.service;
 
-import com.springBootAppication.Exception.UsernmeOrIdNotFoundException;
 import com.springBootAppication.dto.ChangePasswordForm;
 import com.springBootAppication.entity.User;
+import com.springBootAppication.exception.UsernmeOrIdNotFoundException;
 
 public interface UserService {
 

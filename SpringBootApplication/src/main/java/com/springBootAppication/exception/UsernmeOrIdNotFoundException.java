@@ -1,4 +1,4 @@
-package com.springBootAppication.Exception;
+package com.springBootAppication.exception;
 
 public class UsernmeOrIdNotFoundException extends Exception {
 

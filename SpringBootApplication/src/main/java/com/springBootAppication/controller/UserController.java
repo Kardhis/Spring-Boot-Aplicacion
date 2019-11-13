@@ -1,5 +1,7 @@
 package com.springBootAppication.controller;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -17,9 +19,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.springBootAppication.Exception.UsernmeOrIdNotFoundException;
 import com.springBootAppication.dto.ChangePasswordForm;
+import com.springBootAppication.entity.Role;
 import com.springBootAppication.entity.User;
+import com.springBootAppication.exception.CustomFieldValidationException;
+import com.springBootAppication.exception.UsernmeOrIdNotFoundException;
 import com.springBootAppication.repository.RoleRepository;
 import com.springBootAppication.service.UserService;
 
@@ -51,6 +55,46 @@ public class UserController {
 		return "user-form/user-view";
 	}
 	
+	@GetMapping("/signup")
+	public String signup(Model model) {
+		Role userRole = roleRepository.findByName("USER");
+		List<Role> roles = Arrays.asList(userRole);
+		model.addAttribute("userForm", new User());
+		model.addAttribute("roles", roles);
+		model.addAttribute("signup", true);
+		
+		return("user-form/user-signup");
+	}
+	
+	@PostMapping("/signup")
+	public String postSignup(@Valid @ModelAttribute("userForm") User user, BindingResult result, ModelMap model) {
+		Role userRole = roleRepository.findByName("USER");
+		List<Role> roles = Arrays.asList(userRole);
+		model.addAttribute("userForm", user);
+		model.addAttribute("roles", roles);
+		model.addAttribute("signup", true);
+		
+		// Verificamos si el resultado tiene errores:
+		if (result.hasErrors()) {
+			return("user-form/user-signup");
+		} else { // Si no hay errores, procedemos a crear el usuario introducido en la vista:
+			try {
+				userService.createUser(user);
+			} catch (CustomFieldValidationException cfve) {
+				result.rejectValue(cfve.getFieldName(), null, cfve.getMessage());
+				return("user-form/user-signup");
+			} catch (Exception e) {
+				model.addAttribute("formErrorMessage", e.getMessage());
+				return("user-form/user-signup");
+			}
+		}
+
+		model.addAttribute("userList", userService.getAllUsers());
+		model.addAttribute("roles", roleRepository.findAll());
+		
+		return "index";
+	}
+	
 	@PostMapping("/userForm")	// El BindingResult encapsula los errores producidos al realizar la validación.
 	public String createUser(@Valid @ModelAttribute("userForm") User user, BindingResult result, ModelMap model) {
 		// Verificamos si el resultado tiene errores:
@@ -62,6 +106,13 @@ public class UserController {
 				userService.createUser(user);
 				model.addAttribute("userForm", new User());
 				model.addAttribute("listTab", "active");
+			} catch (CustomFieldValidationException cfve) {
+				result.rejectValue(cfve.getFieldName(), null, cfve.getMessage());
+				model.addAttribute("userForm", user);
+				model.addAttribute("formTab", "active");
+				model.addAttribute("userList", userService.getAllUsers());
+				model.addAttribute("roles", roleRepository.findAll());
+				
 			} catch (Exception e) {
 				model.addAttribute("formErrorMessage", e.getMessage());
 				model.addAttribute("userForm", user);
